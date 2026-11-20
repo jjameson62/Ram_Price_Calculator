@@ -1,16 +1,30 @@
-Ram calculator
+PROGRAM: RAM Price Calculator
 
-year 
+PURPOSE:
+    Estimate the price of RAM and its price per GB.
 
-MHz
+GROUP MEMBERS:
+    Aleks  – GUI and integration
+    Jared  – Price calculations
+    Gordon – RAM information and validation
 
-ddr
+INPUTS:
+    Manufacturing year
+    RAM speed
+    DDR generation
+    Capacity in GB
+
+VARIABLES:
 
 
-GB
+OUTPUTS:
+    Estimated price
+    Price per GB
 
-
-
-Price
-
-$/GB
+BEGIN PROGRAM
+    DISPLAY the RAM calculator window
+    GET the user's RAM specifications
+    VALIDATE the inputs
+    CALCULATE the estimated price and price per GB
+    DISPLAY the results
+END PROGRAM
