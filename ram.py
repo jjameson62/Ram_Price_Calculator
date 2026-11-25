@@ -40,7 +40,7 @@ class calculate_price:
 
         current_year = self.current_year
         first_year = self.release_years[ddr_version]
-        if first_year <= year <= current_year:
+        if not first_year <= year <= current_year:
             raise ValueError(
                 f"The manufacturing year for {ddr_version} must be a whole number "
                 f"between {first_year} and {current_year}."
