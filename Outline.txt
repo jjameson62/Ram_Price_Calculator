@@ -5,8 +5,8 @@ PURPOSE:
 
 GROUP MEMBERS:
     Aleks  – GUI and integration
-    Jared  – Price calculations
-    Gordon – RAM information and validation
+    Gordon  – Price calculations
+    Jared – RAM information and validation
 
 INPUTS:
     Manufacturing year

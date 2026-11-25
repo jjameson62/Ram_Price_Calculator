@@ -5,7 +5,9 @@ root=tk.Tk() # initalizes the main application window, refered to as root
 from tkinter import messagebox  #from the tkinter module, import ttk and messagebox functions alowing us to display and output text.
 root.title('Ram Calculator') # main window (root) title is set to 'Circle Circumference Calculator'
 ddr_version=4 # default ddr version
+from ram import calculate_price as RamCalculator
 
+calculator = RamCalculator()
 
 
 def set_ddr_version(number):
@@ -43,35 +45,41 @@ def calculate_price():
 title_Label = tk.Label(root,text = 'Ram Calculator') #Title side label text
 title_Label.grid(row=0, column=1) #grid position of title on screen
 
+#Year input
 year_Label = tk.Label(root,text = 'Enter The Year (from/including 2007):') #'first number' side label text
 year_Label.grid(row=3, column=0) #grid position of first_label on screen
 year_LabelValue=tk.StringVar() #variable to string value for input
 year_LabelEntry=tk.Entry(root,width=25,textvariable=year_LabelValue) # a side text entry attributes
 year_LabelEntry.grid(row=3,column=1) # 'A' side text entry label grid position
 
+#GB input
 gb_Label = tk.Label(root,text = 'Enter The amount of GigaBytes:') #'first number' side label text
 gb_Label.grid(row=4, column=0) #grid position of first_label on screen
 gb_LabelValue=tk.StringVar() #variable to string value for input
 gb_LabelEntry=tk.Entry(root,width=25,textvariable=gb_LabelValue) # a side text entry attributes
 gb_LabelEntry.grid(row=4,column=1) # 'A' side text entry label grid position
-
+#DDR version 
 gb_Label = tk.Label(root,text = 'Choose which DDR version:') #'first number' side label text
 gb_Label.grid(row=5, column=0) #grid position of first_label on screen
 
-
+#DDR3 button
 ddr3_btn=tk.Button(root,text="DDR3",command=lambda:set_ddr_version(3))
 ddr3_btn.grid(row=5,column=1)
 
+#DDR4 button
 ddr4_btn=tk.Button(root,text="DDR4",command=lambda:set_ddr_version(4))
 ddr4_btn.grid(row=6,column=1)
-
+#DDR5 button 
 ddr4_btn=tk.Button(root,text="DDR5",command=lambda:set_ddr_version(5))
 ddr4_btn.grid(row=7,column=1)
 
+#Calculate the price
 calculate_btn=tk.Button(root,text="Calculate Price",command=lambda:calculate_price())
 calculate_btn.grid(row=10,column=0)
 
-#button for exiting below
+
+
+#Button for exiting below
 exitButton = tk.Button(root,text='Exit',command=root.destroy) #exit button
 exitButton.grid(row=0,column=0) #exit button grid
 
