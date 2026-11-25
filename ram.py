@@ -26,58 +26,49 @@ class calculate_price:
         "DDR5": (5200, 6000),
     }
     # Verifies that ram also has a ddr version
-    def base(self, ddr_version):
-        if ddr_version not in self.prices:
+    def base(self, ddr):
+        if ddr not in self.prices:
             raise ValueError("Choose DDR3, DDR4, or DDR5.")
-        return self.prices[ddr_version]
+        return self.prices[ddr]
 
   
     #Validate the details before calculation
-    def validate(self, ddr_version, speed, gb, year):
-        self.ram_speed(ddr_version, speed)
+    def validate(self, ddr, speed, gb, year):
+        self.ram_speed(ddr, speed)
         if gb <= 0:
             raise ValueError("Capacity must be a positive number of GB.")
 
         current_year = self.current_year
-        first_year = self.release_years[ddr_version]
+        first_year = self.release_years[ddr]
         if not first_year <= year <= current_year:
             raise ValueError(
-                f"The manufacturing year for {ddr_version} must be a whole number "
+                f"The manufacturing year for {ddr} must be a whole number "
                 f"between {first_year} and {current_year}."
             )
-    #Define the ram speed
-    def ram_speed(self, ddr_version, speed):
-        self.base(ddr_version)  # Check the generation before looking up its speed range.
+    #Define ram speed
+    def ram_speed(self, ddr, speed):
+        self.base(ddr)  # Check the generation before looking up its speed range.
         if not isinstance(speed, (int, float)) or speed <= 0:
             raise ValueError("RAM speed must be a positive number in MT/s.")
 
-        low, high = self.speed_ranges[ddr_version]
+        low, high = self.speed_ranges[ddr]
         if speed <= low:
             return 0.95
         elif speed <= high:
             return 1.0
         else:
-            return 1.05    
+            return 1.05    #Multipler for the value
         
     #Calculate the Price per GB after Depreciation
-    def price_per_gb(self, ddr_version, speed, gb, year): 
-        return self.total_price(ddr_version, speed, gb, year) / gb
+    def price_per_gb(self, ddr, speed, gb, year): 
+        return self.total_price(ddr, speed, gb, year) / gb
     
     #Calculate the total price for the ram
-    def total_price(self, ddr_version, speed, gb, year): 
+    def total_price(self, ddr, speed, gb, year): 
         
-        self.validate(ddr_version, speed, gb, year)
+        self.validate(ddr, speed, gb, year)
         age = self.current_year - year
 
         # Multiplying by 0.90 once per year keeps 90% of the previous value
-        return gb * self.base(ddr_version) * self.ram_speed(ddr_version, speed) * 0.90 ** age
+        return gb * self.base(ddr) * self.ram_speed(ddr, speed) * 0.90 ** age
     
-if __name__ == "__main__":
-    # Run this file directly to try the calculations without opening the GUI.
-    calculator = calculate_price()
-    ddr_version, speed, gb, year = "DDR4", 3200, 16, 2020
-    total = calculator.total_price(ddr_version, speed, gb, year)
-    per_gb = calculator.price_per_gb(ddr_version, speed, gb, year)
-    print(f"Default price per GB: ${calculator.base(ddr_version):.2f}")
-    print(f"Estimated total price: ${total:.2f}")
-    print(f"Estimated price per GB: ${per_gb:.2f}")
