@@ -55,9 +55,9 @@ def calculate_price():  # Define what happens when the Calculate Price button is
             gb=gb,  # Pass the entered capacity to the calculator gb parameter
             year=year,  # Pass the entered manufacturing year to the calculator year parameter
         )
-    except ValueError as error:
-        messagebox.showerror("Invalid input", str(error), parent=root)
-        return
+    except ValueError as error: # try except block to add erros raised in 
+        messagebox.showerror("Invalid input", str(error), parent=root) #show the error on the screen
+        return # return if errors happen
 
     total_price_per_gb = calculator.total_price_per_gb(
         ddr=f"DDR{ddr}",  # Convert the selected number, such as 4, to the dictionary key DDR4
@@ -65,9 +65,9 @@ def calculate_price():  # Define what happens when the Calculate Price button is
         gb=gb,  # Pass the entered capacity to the calculator gb parameter
         year=year,  # Pass the entered manufacturing year to the calculator year parameter
 
-    )  
-    total_result.set(f"Total price: ${total:.2f}")
-    per_gb_result.set(f"Price per GB: ${total_price_per_gb:.2f}")
+    )  #convert the values
+    total_result.set(f"Total price: ${total:.2f}") # text formatting
+    per_gb_result.set(f"Price per GB: ${total_price_per_gb:.2f}") # text formatting
        
 title_Label = tk.Label(root,text = 'Ram Calculator') #Title side label text
 title_Label.grid(row=0, column=1) #grid position of title on screen

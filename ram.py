@@ -51,12 +51,12 @@ class calculate_price:  # Define a class that groups RAM price data, validation,
             raise ValueError("RAM speed must be a positive number.")  # Reject a speed that is not a positive number
         #Assigns a + or - value based on speed
         low, high = self.speed_ranges[ddr]  # Read the low and high thresholds for the selected DDR generation
-        if speed < low or speed > high:
+        if speed < low or speed > high: # if the speed is Out of Bounds,
             raise ValueError(
                 "\nIncorrect ram speed!"
                 f"\n{ddr} Low: {low}"
-                f"\n{ddr} High: {high}"
-            )
+                f"\n{ddr} High: {high}" 
+            ) #captures ram output error with high, low  limits in the error.
         if speed <= low:  # Check whether speed is at or below the low threshold
             return 0.95  # Return a multiplier that reduces the price by five percent
         elif speed <= high:  # Otherwise, check whether speed is at or below the high threshold
