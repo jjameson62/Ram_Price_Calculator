@@ -54,7 +54,8 @@ def calculate_price():  # Define what happens when the Calculate Price button is
         year=year,  # Pass the entered manufacturing year to the calculator year parameter
 
     )  
-    messagebox.showinfo("Price", f"Total price: ${total:.2f}\n" f"Price per GB: ${total_price_per_gb:.2f}",)  # Display the returned total price in a popup
+    total_result.set(f"Total price: ${total:.2f}")
+    per_gb_result.set(f"Price per GB: ${total_price_per_gb:.2f}")
        
 title_Label = tk.Label(root,text = 'Ram Calculator') #Title side label text
 title_Label.grid(row=0, column=1) #grid position of title on screen
@@ -112,6 +113,15 @@ calculate_btn.grid(row=10,column=1)  # Place the Calculate Price button below th
 exitButton = tk.Button(root,text='Exit',command=root.destroy) #exit button
 exitButton.grid(row=10,column=0) #exit button grid
 
+#Results button 
+total_result = tk.StringVar(value="Total price: ")  # Hold the total price text shown in the window
+per_gb_result = tk.StringVar(value="Price per GB: ")  # Hold the price per GB text shown in the window
+
+total_result_label = tk.Label(root, textvariable=total_result)  # Create a label connected to the total price text
+total_result_label.grid(row=8, column=1, columnspan=2, sticky="w")  # Show the total price above the action buttons
+
+per_gb_result_label = tk.Label(root, textvariable=per_gb_result)  # Create a label connected to the price per GB text
+per_gb_result_label.grid(row=9, column=1, columnspan=2, sticky="w")  # Show the price per GB below the total price
 
 #formatting the different text feilds and labels
 for child in root.winfo_children(): #for a every child in the window

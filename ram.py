@@ -5,9 +5,8 @@
 class calculate_price:  # Define a class that groups RAM price data, validation, and calculations
 
    # Refrence point for calculation
-    current_year = 2026  # Use 2026 as the reference year when calculating age
-
-    # Defines the starting price per GB
+    current_year = 2026  
+    # Defines starting price per GB
     prices = {  
         "DDR3": 3.83, #3.83 $ in 2007 
         "DDR4": 7.81, #7.81 $ in 2016 
@@ -19,13 +18,13 @@ class calculate_price:  # Define a class that groups RAM price data, validation,
         "DDR4": 2014,  # Set the earliest DDR4 manufacturing year to 2014
         "DDR5": 2020,  # Set the earliest DDR5 manufacturing year to 2020
     } 
-    #gives ranges for the speed
+    #Gives ranges for the speed
     speed_ranges = {  
         "DDR3": (1333, 1600),  # Use 1333 and 1600 as the DDR3 speed thresholds
         "DDR4": (2666, 3200),  # Use 2666 and 3200 as the DDR4 speed thresholds
         "DDR5": (5200, 6000),  # Use 5200 and 6000 as the DDR5 speed thresholds
     }  
-    # Verifies that ram also has a ddr version
+    #Verifies that ram also has a ddr version
     def base(self, ddr):  # Define a method that checks the DDR generation and returns its starting price
         if ddr not in self.prices:  # Check whether the requested generation is missing from the price table
             raise ValueError("Choose DDR3, DDR4, or DDR5.")  # Reject an unknown generation with an explanatory error
@@ -49,8 +48,8 @@ class calculate_price:  # Define a class that groups RAM price data, validation,
     def ram_speed(self, ddr, speed):  # Define a method that validates speed and returns a price multiplier
         self.base(ddr)  # Check the generation before looking up its speed range.
         if not isinstance(speed, (int, float)) or speed <= 0:  # Check whether speed is not numeric or is zero or negative
-            raise ValueError("RAM speed must be a positive number in MT/s.")  # Reject a speed that is not a positive number
-
+            raise ValueError("RAM speed must be a positive number.")  # Reject a speed that is not a positive number
+        #Assigns a + or - value based on speed
         low, high = self.speed_ranges[ddr]  # Read the low and high thresholds for the selected DDR generation
         if speed <= low:  # Check whether speed is at or below the low threshold
             return 0.95  # Return a multiplier that reduces the price by five percent
