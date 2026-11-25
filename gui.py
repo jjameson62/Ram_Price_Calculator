@@ -1,61 +1,61 @@
 import tkinter as tk #import the tkinter module with the alias tk in our script
-#import pricing
-import math as m # imports the math module with the alias m
+
 root=tk.Tk() # initalizes the main application window, refered to as root
 from tkinter import messagebox  #from the tkinter module, import ttk and messagebox functions alowing us to display and output text.
 root.title('Ram Calculator') # main window (root) title is set to 'Circle Circumference Calculator'
 ddr=4 # default ddr version
-from ram import calculate_price as RamCalculator
+from ram import calculate_price as RamCalculator  # Import the pricing class and give it the local name RamCalculator
 
-calculator = RamCalculator()
+calculator = RamCalculator()  # Create the calculator object used to estimate RAM prices
 
 
-def set_ddr(number):
-    global ddr
-    ddr=number
-#Calculate the price
-def calculate_price():
-    try:
-        year = int(year_LabelValue.get())
-        gb = int(gb_LabelValue.get())
-        speed = int(speed_LabelValue.get())
-    except ValueError:
-        messagebox.showerror("Error", "Please enter valid numbers for all fields")
-        return
+def set_ddr(number):  # Define the function that remembers which DDR button was clicked
+    global ddr  # Use the shared DDR selection rather than creating a local variable
+    ddr=number  # Save the selected generation number for the next calculation
 
-    if year < 2007 or year > 2026:
-        messagebox.showerror("Error", "Please enter a Year (2007-2026)") # displays a error message to user
-        # year_LabelValue.set("")
-        # gb_LabelValue.set("")
-        # speed_LabelValue.set("")
-        return
+    #Button colored in <<< Copilot
+    buttons = {3: ddr3_btn, 4: ddr4_btn, 5: ddr5_btn}
 
-    if ddr == 4 and year < 2014:
-        messagebox.showerror("Error", "DDR4 was not released until 2014!!!") # displays a error message to user
-        # year_LabelValue.set("")
-        # gb_LabelValue.set("")
-        # speed_LabelValue.set("")
-        return
+    for generation, button in buttons.items():
+        selected = generation == ddr  # Check whether this button is selected
+        background = "#2563eb" if selected else "#f0f0f0"
+        foreground = "white" if selected else "black"
 
-    if ddr == 5 and year < 2020:
-        messagebox.showerror("Error", "DDR5 was not released until 2020!!!") # displays a error message to user
-        # year_LabelValue.set("")
-        # gb_LabelValue.set("")
-        # speed_LabelValue.set("")
-        return
-    try:
-        total = calculator.total_price(
-            ddr=f"DDR{ddr}",
-            speed=speed,
-            gb=gb,
-            year=year,
+        button.config(
+            bg=background,  # Set the background color
+            fg=foreground,  # Set the text color
+            activebackground=background,  # Keep the color while pressed
+            activeforeground=foreground,
+            relief="sunken" if selected else "raised",
         )
-    except ValueError as error:
-        messagebox.showerror("Error", str(error)) # displays a error message to user
-        return
 
+        #<<< Copilot
 
-    messagebox.showinfo("Price", f"Total price: ${total}")
+#Calculate the price
+def calculate_price():  # Define what happens when the Calculate Price button is clicked
+    try:  # Attempt to read the inputs so invalid number conversions can be caught
+        year = int(year_LabelValue.get())  # Read the manufacturing year and convert its text to a whole number
+        gb = int(gb_LabelValue.get())  # Read the capacity in GB and convert its text to a whole number
+        speed = int(speed_LabelValue.get())  # Read the speed and convert its text to a whole number
+    except ValueError:  # Handle a field that cannot be converted to a whole number
+        messagebox.showerror("Error", "Please enter valid numbers for all fields")  # Tell the user that every input field needs a valid number
+        return  # Stop this button callback without calculating a price
+    
+    total = calculator.total_price(  # Begin a call to the calculator and store its returned total
+        ddr=f"DDR{ddr}",  # Convert the selected number, such as 4, to the dictionary key DDR4
+        speed=speed,  # Pass the entered speed to the calculator speed parameter
+        gb=gb,  # Pass the entered capacity to the calculator gb parameter
+        year=year,  # Pass the entered manufacturing year to the calculator year parameter
+    )
+    total_price_per_gb = calculator.total_price_per_gb(
+        ddr=f"DDR{ddr}",  # Convert the selected number, such as 4, to the dictionary key DDR4
+        speed=speed,  # Pass the entered speed to the calculator speed parameter
+        gb=gb,  # Pass the entered capacity to the calculator gb parameter
+        year=year,  # Pass the entered manufacturing year to the calculator year parameter
+
+    )  
+    total_result.set(f"Total price: ${total:.2f}")
+    per_gb_result.set(f"Price per GB: ${total_price_per_gb:.2f}")
        
 title_Label = tk.Label(root,text = 'Ram Calculator') #Title side label text
 title_Label.grid(row=0, column=1) #grid position of title on screen
@@ -86,26 +86,26 @@ speed_LabelEntry.grid(row=5,column=1) # 'A' side text entry label grid position
 gb_Label = tk.Label(root,text = 'Select DDR version:') #'first number' side label text
 gb_Label.grid(row=6, column=0) #grid position of first_label on screen
 
-#Button anchor <--- Used Copilot
-ddr_frame = tk.Frame(root)
-ddr_frame.grid(row=6, column=1, sticky="ew")
-for column in range(3):
-    ddr_frame.columnconfigure(column, weight=1, uniform="ddr")
+#Button anchor <<< made by copilot
+ddr_frame = tk.Frame(root)  # Create a container that keeps the three DDR buttons together
+ddr_frame.grid(row=6, column=1, sticky="ew")  # Place the container under the input boxes and stretch it horizontally
+for column in range(3):  # Visit each of the three button columns inside the container
+    ddr_frame.columnconfigure(column, weight=1, uniform="ddr")  # Make this column share available space equally with the other button columns
 
 #DDR3 button
-ddr3_btn=tk.Button(ddr_frame,text="DDR3",command=lambda:set_ddr(3))
-ddr3_btn.grid(row=0,column=0, padx=(0, 4), sticky="ew")
+ddr3_btn=tk.Button(ddr_frame,text="DDR3",command=lambda:set_ddr(3))  # Create a DDR3 button that saves 3 when clicked
+ddr3_btn.grid(row=0,column=0, padx=(0, 4), sticky="ew")  # Place DDR3 first, stretch it horizontally, and leave a gap on its right
 
 #DDR4 button
-ddr4_btn=tk.Button(ddr_frame,text="DDR4",command=lambda:set_ddr(4))
-ddr4_btn.grid(row=0,column=1, padx=(0, 4), sticky="ew")
+ddr4_btn=tk.Button(ddr_frame,text="DDR4",command=lambda:set_ddr(4))  # Create a DDR4 button that saves 4 when clicked
+ddr4_btn.grid(row=0,column=1, padx=(0, 4), sticky="ew")  # Place DDR4 second, stretch it horizontally, and leave a gap on its right
 #DDR5 button 
-ddr5_btn=tk.Button(ddr_frame,text="DDR5",command=lambda:set_ddr(5))
-ddr5_btn.grid(row=0,column=2, sticky="ew")
+ddr5_btn=tk.Button(ddr_frame,text="DDR5",command=lambda:set_ddr(5))  # Create a DDR5 button that saves 5 when clicked
+ddr5_btn.grid(row=0,column=2, sticky="ew")  # Place DDR5 third and stretch it horizontally
 
 #Calculate the price
-calculate_btn=tk.Button(root,text="Calculate Price",command=lambda:calculate_price())
-calculate_btn.grid(row=10,column=1)
+calculate_btn=tk.Button(root,text="Calculate Price",command=lambda:calculate_price())  # Create a button that runs the calculation callback when clicked
+calculate_btn.grid(row=10,column=1)  # Place the Calculate Price button below the input boxes
 
 
 
@@ -113,6 +113,15 @@ calculate_btn.grid(row=10,column=1)
 exitButton = tk.Button(root,text='Exit',command=root.destroy) #exit button
 exitButton.grid(row=10,column=0) #exit button grid
 
+#Results button 
+total_result = tk.StringVar(value="Total price: ")  # Hold the total price text shown in the window
+per_gb_result = tk.StringVar(value="Price per GB: ")  # Hold the price per GB text shown in the window
+
+total_result_label = tk.Label(root, textvariable=total_result)  # Create a label connected to the total price text
+total_result_label.grid(row=8, column=1, columnspan=2, sticky="w")  # Show the total price above the action buttons
+
+per_gb_result_label = tk.Label(root, textvariable=per_gb_result)  # Create a label connected to the price per GB text
+per_gb_result_label.grid(row=9, column=1, columnspan=2, sticky="w")  # Show the price per GB below the total price
 
 #formatting the different text feilds and labels
 for child in root.winfo_children(): #for a every child in the window
@@ -120,4 +129,4 @@ for child in root.winfo_children(): #for a every child in the window
 
 
 
-root.mainloop()
+root.mainloop()  # Keep processing window events and button clicks until the window closes

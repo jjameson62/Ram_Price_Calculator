@@ -14,8 +14,6 @@ INPUTS:
     DDR generation
     Capacity in GB
 
-VARIABLES:
-
 
 OUTPUTS:
     Estimated price
