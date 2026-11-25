@@ -41,12 +41,24 @@ def calculate_price():  # Define what happens when the Calculate Price button is
         messagebox.showerror("Error", "Please enter valid numbers for all fields")  # Tell the user that every input field needs a valid number
         return  # Stop this button callback without calculating a price
     
-    total = calculator.total_price(  # Begin a call to the calculator and store its returned total
-        ddr=f"DDR{ddr}",  # Convert the selected number, such as 4, to the dictionary key DDR4
-        speed=speed,  # Pass the entered speed to the calculator speed parameter
-        gb=gb,  # Pass the entered capacity to the calculator gb parameter
-        year=year,  # Pass the entered manufacturing year to the calculator year parameter
-    )
+    # total = calculator.total_price(  # Begin a call to the calculator and store its returned total
+    #     ddr=f"DDR{ddr}",  # Convert the selected number, such as 4, to the dictionary key DDR4
+    #     speed=speed,  # Pass the entered speed to the calculator speed parameter
+    #     gb=gb,  # Pass the entered capacity to the calculator gb parameter
+    #     year=year,  # Pass the entered manufacturing year to the calculator year parameter
+    # )
+
+    try:
+        total = calculator.total_price(  # Begin a call to the calculator and store its returned total
+            ddr=f"DDR{ddr}",  # Convert the selected number, such as 4, to the dictionary key DDR4
+            speed=speed,  # Pass the entered speed to the calculator speed parameter
+            gb=gb,  # Pass the entered capacity to the calculator gb parameter
+            year=year,  # Pass the entered manufacturing year to the calculator year parameter
+        )
+    except ValueError as error:
+        messagebox.showerror("Invalid input", str(error), parent=root)
+        return
+
     total_price_per_gb = calculator.total_price_per_gb(
         ddr=f"DDR{ddr}",  # Convert the selected number, such as 4, to the dictionary key DDR4
         speed=speed,  # Pass the entered speed to the calculator speed parameter
