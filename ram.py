@@ -1,6 +1,6 @@
 #Estimate RAM prices using sample base prices and yearly depreciation at a rate of 10% per year
 #The ram is deifned with their default "prices" the "released_year" and the "speed_range"
-
+from tkinter import messagebox  #from the tkinter module, import ttk and messagebox functions alowing us to display and output text.
 #Create a class to calculate the price
 class calculate_price:
 
@@ -28,7 +28,7 @@ class calculate_price:
     # Verifies that ram also has a ddr version
     def base(self, ddr):
         if ddr not in self.prices:
-            raise ValueError("Choose DDR3, DDR4, or DDR5.")
+            raise ValueError("\nChoose DDR3, DDR4, or DDR5.")
         return self.prices[ddr]
 
   
@@ -36,22 +36,30 @@ class calculate_price:
     def validate(self, ddr, speed, gb, year):
         self.ram_speed(ddr, speed)
         if gb <= 0:
-            raise ValueError("Capacity must be a positive number of GB.")
+            raise ValueError("\nCapacity must be a positive number of GB.")
 
         current_year = self.current_year
         first_year = self.release_years[ddr]
         if not first_year <= year <= current_year:
             raise ValueError(
-                f"The manufacturing year for {ddr} must be a whole number "
+                f"\nThe manufacturing year for {ddr} must be a whole number "
                 f"between {first_year} and {current_year}."
             )
     #Define ram speed
     def ram_speed(self, ddr, speed):
         self.base(ddr)  # Check the generation before looking up its speed range.
         if not isinstance(speed, (int, float)) or speed <= 0:
-            raise ValueError("RAM speed must be a positive number in MT/s.")
+            raise ValueError("\nRAM speed must be a positive number in MT/s.")
 
         low, high = self.speed_ranges[ddr]
+        if speed < low or speed > high:
+            raise ValueError(
+                f"\nRAM speed must be a within correct range for {ddr}"
+                f"\nLow: {low}"
+                f"\nHigh: {high}"
+            )
+
+        
         if speed <= low:
             return 0.95
         elif speed <= high:
@@ -70,5 +78,5 @@ class calculate_price:
         age = self.current_year - year
 
         # Multiplying by 0.90 once per year keeps 90% of the previous value
-        return gb * self.base(ddr) * self.ram_speed(ddr, speed) * 0.90 ** age
+        return round((gb * self.base(ddr) * self.ram_speed(ddr, speed) * 0.90 ** age),3)
     

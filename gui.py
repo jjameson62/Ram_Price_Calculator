@@ -25,31 +25,36 @@ def calculate_price():
 
     if year < 2007 or year > 2026:
         messagebox.showerror("Error", "Please enter a Year (2007-2026)") # displays a error message to user
-        year_LabelValue.set("")
-        gb_LabelValue.set("")
-        speed_LabelValue.set("")
+        # year_LabelValue.set("")
+        # gb_LabelValue.set("")
+        # speed_LabelValue.set("")
         return
 
     if ddr == 4 and year < 2014:
-        messagebox.showerror("Error", "DDR4 was not released until 2014!!1") # displays a error message to user
-        year_LabelValue.set("")
-        gb_LabelValue.set("")
-        speed_LabelValue.set("")
+        messagebox.showerror("Error", "DDR4 was not released until 2014!!!") # displays a error message to user
+        # year_LabelValue.set("")
+        # gb_LabelValue.set("")
+        # speed_LabelValue.set("")
         return
 
     if ddr == 5 and year < 2020:
         messagebox.showerror("Error", "DDR5 was not released until 2020!!!") # displays a error message to user
-        year_LabelValue.set("")
-        gb_LabelValue.set("")
-        speed_LabelValue.set("")
+        # year_LabelValue.set("")
+        # gb_LabelValue.set("")
+        # speed_LabelValue.set("")
+        return
+    try:
+        total = calculator.total_price(
+            ddr=f"DDR{ddr}",
+            speed=speed,
+            gb=gb,
+            year=year,
+        )
+    except ValueError as error:
+        messagebox.showerror("Error", str(error)) # displays a error message to user
         return
 
-    total = calculator.total_price(
-        ddr=f"DDR{ddr}",
-        speed=speed,
-        gb=gb,
-        year=year,
-    )
+
     messagebox.showinfo("Price", f"Total price: ${total}")
        
 title_Label = tk.Label(root,text = 'Ram Calculator') #Title side label text
